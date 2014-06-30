@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/polymer-animation/web-animations.html">
 <script src="dynamics.js"></script>
 <script src="scrolling.js"></script>
 <style>
@@ -97,9 +98,6 @@ body {
         var mask = this.$.mask;
         this.controller = new DrawerController({
             target: this,
-            left: 0,
-            right: 300,
-            position: 0,
             curve: 'ease-in-out',
             willOpen: function() {
                 mask.style.display = 'block';
@@ -111,11 +109,15 @@ body {
                 content.style.display = 'none';
                 this.active = false;
             },
-            onAnimate: function(position) {
-                // FIXME: We should animate the opacity from zero, but that triggers http://crbug.com/328106
-                mask.style.opacity = (position / 300) * 0.2;
-                content.style.transform = 'translateX(' + (position - 300) + 'px)';
-            },
+            movement: 300,
+            animation: new AnimationGroup([
+                new Animation(mask,
+                    [{opacity: 0.001}, {opacity: 0.2}],
+                    {duration: 1000, fill: 'both'}),
+                new Animation(content,
+                    [{transform: 'translate3d(-300px,0,0)'}, {transform: 'translate3d(0px, 0, 0)'}],
+                    {duration: 1000, fill: 'both'})
+                ], {fill: 'both'}),
         });
       },
     });
