@@ -210,7 +210,7 @@ DrawerController.prototype.resumeAnimation = function(direction) {
 
     this.containerTiming.direction = direction;
     this.player.currentTime = this.progress() * 1000;
-    this.player.playbackRate = animationFraction / this.animationDuration;
+    this.player.playbackRate = animationFraction / this.animationDuration / 10;
     this.player.play();
 
 };
@@ -284,7 +284,7 @@ DrawerController.prototype.isOpen = function() {
 }
 ;
 DrawerController.prototype.toggle = function() {
-    if (this.player.paused || this.progress() <= 0 || this.player.progress() >= 1000) {
+    if (this.player.paused || this.progress() <= 0 || this.progress() >= 1) {
         if (this.isOpen())
             this.close();
         else
